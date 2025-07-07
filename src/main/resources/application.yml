@@ -1,0 +1,206 @@
+spring:
+  application:
+    name: franchise-management-api
+  profiles:
+    active: local
+  
+  # Configuration to run schema.sql automatically
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+---
+# Local profile for development
+spring:
+  config:
+    activate:
+      on-profile: local
+  r2dbc:
+    url: r2dbc:mysql://localhost:3307/franchise_db
+    username: root
+    password: rootpassword
+    pool:
+      initial-size: 5
+      max-size: 20
+      max-idle-time: 30m
+      validation-query: SELECT 1
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+logging:
+  level:
+    '[com.retailchain.franchise]': DEBUG
+    '[org.springframework.r2dbc]': DEBUG
+    '[io.r2dbc.mysql]': DEBUG
+
+---
+# Docker profile for containers
+spring:
+  config:
+    activate:
+      on-profile: docker
+  r2dbc:
+    url: r2dbc:mysql://mysql:3306/franchise_db
+    username: ${DB_USERNAME:franchise_user}
+    password: ${DB_PASSWORD:franchise_pass}
+    pool:
+      initial-size: 5
+      max-size: 20
+      max-idle-time: 30m
+      validation-query: SELECT 1
+  data:
+    redis:
+      host: redis
+      port: 6379
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+logging:
+  level:
+    '[com.retailchain.franchise]': INFO
+    '[org.springframework]': INFO
+
+---
+# Production profile for AWS deployment
+spring:
+  config:
+    activate:
+      on-profile: production
+  r2dbc:
+    url: r2dbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME:franchise_db}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    pool:
+      initial-size: 10
+      max-size: 50
+      max-idle-time: 30m
+      validation-query: SELECT 1
+      max-create-connection-time: 2s
+      max-acquire-time: 10s
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          time-between-eviction-runs: 60s
+
+# Production logging
+logging:
+  level:
+    '[com.retailchain.franchise]': INFO
+    '[org.springframework]': WARN
+    '[io.r2dbc]': WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: /var/log/franchise-api/application.log
+    max-size: 10MB
+    max-history: 30
+
+# Production management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /management
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: production
+
+# Production server configuration
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  tomcat:
+    connection-timeout: 20s
+    threads:
+      max: 200
+      min-spare: 10
+
+---
+# Railway profile for cloud deployment
+spring:
+  config:
+    activate:
+      on-profile: railway
+  r2dbc:
+    url: r2dbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
+    pool:
+      initial-size: 5
+      max-size: 10
+      max-idle-time: 30m
+      validation-query: SELECT 1
+  data:
+    redis:
+      host: ${REDISHOST:localhost}
+      port: ${REDISPORT:6379}
+      password: ${REDISPASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+  sql:
+    init:
+      mode: never  # We use SchemaInitializer instead
+
+logging:
+  level:
+    '[com.retailchain.franchise]': INFO
+    '[org.springframework]': WARN
+
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,27 @@
+# terraform.tfvars.example - Example variables file
+# Copy this file to terraform.tfvars and adjust the values
+# Note: terraform.tfvars should NOT be committed to Git
+
+aws_region   = "us-east-1"
+environment  = "production"
+project_name = "franchise-api"
+
+# Network
+vpc_cidr = "10.0.0.0/16"
+
+# Database
+db_instance_class    = "db.t3.micro"      # Free tier
+db_allocated_storage = 20                  # Free tier: up to 20GB
+db_name              = "franchise_db"
+db_username          = "franchise_user"
+db_password          = "ChangeMePlease123!" # CHANGE in production
+
+# Redis
+redis_node_type = "cache.t3.micro"         # Free tier
+
+# ECS
+container_image   = "franchise-management-api:1.0.0"  # Update with your image
+container_port    = 8080
+ecs_task_cpu      = "256"                  # 0.25 vCPU
+ecs_task_memory   = "512"                  # 512 MB
+ecs_desired_count = 1                      # Single instance to save costs

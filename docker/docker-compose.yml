@@ -1,0 +1,55 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: franchise-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: franchise_db
+      MYSQL_USER: franchise_user
+      MYSQL_PASSWORD: franchise_pass
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - franchise-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: franchise-redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - franchise-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    image: franchise-management-api:1.0.0
+    container_name: franchise-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_USERNAME: franchise_user
+      DB_PASSWORD: franchise_pass
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - franchise-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  franchise-network:
+    driver: bridge
