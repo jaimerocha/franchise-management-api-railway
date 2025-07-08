@@ -2,9 +2,7 @@
 
 ## 🌐 Live Demo URL
 
-The API is deployed and running at: **https://your-app-name.up.railway.app**
-
-*(Note: Replace 'your-app-name' with your actual Railway app URL after deployment)*
+The API is deployed and running at: **https://franchise-management-api-railway-production.up.railway.app**
 
 ## ✅ API Endpoints - Technical Test Requirements
 
@@ -12,40 +10,40 @@ The API implements all 6 required endpoints as specified in the technical test:
 
 ### 1️⃣ Add New Franchise
 ```bash
-curl -X POST https://your-app-name.up.railway.app/api/v1/franchises \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises \
   -H "Content-Type: application/json" \
   -d '{"name": "McDonald'\''s"}'
 ```
 
 ### 2️⃣ Add New Branch to Franchise
 ```bash
-curl -X POST https://your-app-name.up.railway.app/api/v1/franchises/1/branches \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/branches \
   -H "Content-Type: application/json" \
   -d '{"name": "McDonald'\''s Downtown"}'
 ```
 
 ### 3️⃣ Add New Product to Branch
 ```bash
-curl -X POST https://your-app-name.up.railway.app/api/v1/branches/1/products \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/branches/1/products \
   -H "Content-Type: application/json" \
   -d '{"name": "Big Mac", "stock": 100}'
 ```
 
 ### 4️⃣ Delete Product from Branch
 ```bash
-curl -X DELETE https://your-app-name.up.railway.app/api/v1/products/1
+curl -X DELETE https://franchise-management-api-railway-production.up.railway.app/api/v1/products/1
 ```
 
 ### 5️⃣ Modify Product Stock
 ```bash
-curl -X PATCH https://your-app-name.up.railway.app/api/v1/products/1/stock \
+curl -X PATCH https://franchise-management-api-railway-production.up.railway.app/api/v1/products/1/stock \
   -H "Content-Type: application/json" \
   -d '{"stock": 250}'
 ```
 
 ### 6️⃣ Get Products with Maximum Stock per Branch for a Franchise
 ```bash
-curl https://your-app-name.up.railway.app/api/v1/franchises/1/max-stock-products
+curl https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/max-stock-products
 ```
 
 **Response example:**
@@ -74,125 +72,123 @@ curl https://your-app-name.up.railway.app/api/v1/franchises/1/max-stock-products
 
 ## 🧪 Run Complete Test Suite
 
-### Option 1: Download and Run Test Script
+### Option 1: Download and Run Railway Test Script
 
 #### For Linux/Mac:
 ```bash
-# Download the test script
-wget https://raw.githubusercontent.com/jaimerocha/franchise-management-api-railway/main/test-api.sh
+# Download the Railway-specific test script
+wget https://raw.githubusercontent.com/jaimerocha/franchise-management-api-railway/main/test-api-railway.sh
 
 # Make it executable
-chmod +x test-api.sh
+chmod +x test-api-railway.sh
 
-# Update BASE_URL to Railway
-sed -i.bak 's|http://localhost:8080|https://your-app-name.up.railway.app|g' test-api.sh && rm test-api.sh.bak
-
-# Run all tests
-./test-api.sh
+# Run all tests (URL is already configured for Railway)
+./test-api-railway.sh
 ```
 
 #### For Windows (Git Bash):
 ```bash
-# Download the test script
-curl -O https://raw.githubusercontent.com/jaimerocha/franchise-management-api-railway/main/test-api.sh
+# Download the Railway-specific test script
+curl -O https://raw.githubusercontent.com/jaimerocha/franchise-management-api-railway/main/test-api-railway.sh
 
-# Update BASE_URL to Railway
-sed -i 's|http://localhost:8080|https://your-app-name.up.railway.app|g' test-api.sh
+# Make it executable
+chmod +x test-api-railway.sh
 
 # Run all tests
-./test-api.sh
+./test-api-railway.sh
 ```
 
 #### For Windows (PowerShell):
 ```powershell
-# Download the test script
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jaimerocha/franchise-management-api-railway/main/test-api.sh" -OutFile "test-api.sh"
+# Download the Railway-specific test script
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jaimerocha/franchise-management-api-railway/main/test-api-railway.sh" -OutFile "test-api-railway.sh"
 
-# Update BASE_URL manually in a text editor, then run in Git Bash
+# Then run in Git Bash
+# ./test-api-railway.sh
 ```
 
 ### Option 2: Run Tests Manually
 
 ```bash
 # 1. Create multiple franchises
-curl -X POST https://your-app-name.up.railway.app/api/v1/franchises \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises \
   -H "Content-Type: application/json" \
   -d '{"name": "Pizza Hut"}'
 
-curl -X POST https://your-app-name.up.railway.app/api/v1/franchises \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises \
   -H "Content-Type: application/json" \
   -d '{"name": "Subway"}'
 
 # 2. Add branches to franchise ID 1
-curl -X POST https://your-app-name.up.railway.app/api/v1/franchises/1/branches \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/branches \
   -H "Content-Type: application/json" \
   -d '{"name": "Branch North"}'
 
-curl -X POST https://your-app-name.up.railway.app/api/v1/franchises/1/branches \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/branches \
   -H "Content-Type: application/json" \
   -d '{"name": "Branch South"}'
 
 # 3. Add products with different stock levels
-curl -X POST https://your-app-name.up.railway.app/api/v1/branches/1/products \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/branches/1/products \
   -H "Content-Type: application/json" \
   -d '{"name": "Product A", "stock": 50}'
 
-curl -X POST https://your-app-name.up.railway.app/api/v1/branches/1/products \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/branches/1/products \
   -H "Content-Type: application/json" \
   -d '{"name": "Product B", "stock": 150}'
 
-curl -X POST https://your-app-name.up.railway.app/api/v1/branches/2/products \
+curl -X POST https://franchise-management-api-railway-production.up.railway.app/api/v1/branches/2/products \
   -H "Content-Type: application/json" \
   -d '{"name": "Product C", "stock": 200}'
 
 # 4. Test max stock endpoint
-curl https://your-app-name.up.railway.app/api/v1/franchises/1/max-stock-products
+curl https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/max-stock-products
 ```
 
 ## 📊 Additional Endpoints
 
 ### Health Check
 ```bash
-curl https://your-app-name.up.railway.app/actuator/health
+curl https://franchise-management-api-railway-production.up.railway.app/actuator/health
 ```
 
 ### Metrics
 ```bash
-curl https://your-app-name.up.railway.app/actuator/metrics
+curl https://franchise-management-api-railway-production.up.railway.app/actuator/metrics
 ```
 
 ### List All Franchises
 ```bash
-curl https://your-app-name.up.railway.app/api/v1/franchises
+curl https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises
 ```
 
 ### Get Specific Franchise
 ```bash
-curl https://your-app-name.up.railway.app/api/v1/franchises/1
+curl https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1
 ```
 
 ### List Branches by Franchise
 ```bash
-curl https://your-app-name.up.railway.app/api/v1/franchises/1/branches
+curl https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/branches
 ```
 
 ### Update Franchise Name
 ```bash
-curl -X PATCH https://your-app-name.up.railway.app/api/v1/franchises/1/name \
+curl -X PATCH https://franchise-management-api-railway-production.up.railway.app/api/v1/franchises/1/name \
   -H "Content-Type: application/json" \
   -d '{"name": "McDonald'\''s International"}'
 ```
 
 ### Update Branch Name
 ```bash
-curl -X PATCH https://your-app-name.up.railway.app/api/v1/branches/1/name \
+curl -X PATCH https://franchise-management-api-railway-production.up.railway.app/api/v1/branches/1/name \
   -H "Content-Type: application/json" \
   -d '{"name": "Downtown Premium Branch"}'
 ```
 
 ### Update Product Name
 ```bash
-curl -X PATCH https://your-app-name.up.railway.app/api/v1/products/1/name \
+curl -X PATCH https://franchise-management-api-railway-production.up.railway.app/api/v1/products/1/name \
   -H "Content-Type: application/json" \
   -d '{"name": "Big Mac Deluxe"}'
 ```
